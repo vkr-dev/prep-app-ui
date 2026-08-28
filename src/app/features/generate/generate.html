@@ -17,7 +17,39 @@
   }
 
   @if (loading()) {
-    <p class="banner info">Calling Claude…</p>
+    <p class="banner info">Running the agent pipeline…</p>
+  }
+
+  @if (result(); as res) {
+    <section class="run-summary">
+      <div class="stat">
+        <span class="stat-value">{{ res.eval.average_relevance }}<span class="stat-unit">/5</span></span>
+        <span class="stat-label">avg relevance</span>
+      </div>
+      <div class="stat" [class.flagged]="res.eval.duplication_flagged">
+        <span class="stat-value">{{ res.eval.max_pairwise_similarity | number: '1.2-2' }}</span>
+        <span class="stat-label">
+          max similarity{{ res.eval.duplication_flagged ? ' ⚠ dupes flagged' : '' }}
+        </span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ res.metrics.total_latency_ms | number: '1.0-0' }}<span class="stat-unit">ms</span></span>
+        <span class="stat-label">total latency</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ res.metrics.total_input_tokens }}/{{ res.metrics.total_output_tokens }}</span>
+        <span class="stat-label">input/output tokens</span>
+      </div>
+
+      <details class="step-breakdown">
+        <summary>Per-step timing</summary>
+        <ul>
+          @for (step of stepTimeline(); track step[0]) {
+            <li><span class="step-name">{{ step[0] }}</span><span class="step-ms">{{ step[1] }} ms</span></li>
+          }
+        </ul>
+      </details>
+    </section>
   }
 
   @for (group of groups(); track group.difficulty) {

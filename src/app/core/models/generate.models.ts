@@ -1,4 +1,4 @@
-// Mirrors app/schemas/generate.py in prep-app-be.
+// Mirrors app/schemas/generate.py and app/schemas/pipeline.py in prep-app-be.
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
@@ -13,7 +13,24 @@ export interface GenerateRequest {
   topic: string;
 }
 
-export interface GeneratedQuestionSet {
+export interface EvalReport {
+  average_relevance: number;
+  relevance_scores: number[];
+  max_pairwise_similarity: number;
+  duplication_flagged: boolean;
+}
+
+export interface RunMetrics {
+  total_latency_ms: number;
+  step_latencies_ms: Record<string, number>;
+  total_input_tokens: number;
+  total_output_tokens: number;
+}
+
+// The full response shape for POST /api/generate.
+export interface GenerateResult {
   topic: string;
   questions: Question[];
+  eval: EvalReport;
+  metrics: RunMetrics;
 }

@@ -21,12 +21,14 @@ src/app/
     guards/          Route guard - UX redirect only, real enforcement is server-side
   features/
     login/           Login + register form
-    generate/        Topic input, categorized (easy/medium/hard) results view
+    generate/        Topic input, results view (categorized by difficulty + a run summary panel)
 ```
+
+The generate page's run-summary panel surfaces what the backend's pipeline computed: average LLM-judged relevance (1-5), max pairwise duplicate similarity (flagged if too high), total latency, input/output token counts, and a per-step timing breakdown - all from the `eval`/`metrics` fields on the `GenerateResult` response (see prep-app-be's README for what produces them).
 
 ## Status
 
-Day 1 walking skeleton: login/register/logout, Bearer-token HTTP interceptor, topic input wired to POST /api/generate. RAG, eval scores, and observability surfaces in the UI are Day 2.
+Day 2: results view now renders the full agent pipeline's output, including eval scores and observability metrics. Deploy (Day 3) is next.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
 

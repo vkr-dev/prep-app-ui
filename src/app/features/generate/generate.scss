@@ -52,6 +52,79 @@
   }
 }
 
+.run-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e2e4e8;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 90px;
+
+  .stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1b1f27;
+  }
+
+  .stat-unit {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #6b7280;
+    margin-left: 0.15rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #6b7280;
+  }
+
+  &.flagged .stat-value,
+  &.flagged .stat-label {
+    color: #c0392b;
+  }
+}
+
+.step-breakdown {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+
+  summary {
+    cursor: pointer;
+    color: #6b7280;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    max-width: 320px;
+    color: #374151;
+  }
+
+  .step-name {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+  }
+}
+
 .difficulty-group {
   display: flex;
   flex-direction: column;
