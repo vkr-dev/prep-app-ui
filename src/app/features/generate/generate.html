@@ -1,0 +1,37 @@
+<div class="generate-page">
+  <form class="topic-form" (ngSubmit)="submit()">
+    <input
+      type="text"
+      placeholder="Enter a topic, e.g. SQL"
+      [ngModel]="topic()"
+      (ngModelChange)="topic.set($event)"
+      name="topic"
+    />
+    <button type="submit" [disabled]="loading() || !topic().trim()">
+      {{ loading() ? 'Generating…' : 'Generate' }}
+    </button>
+  </form>
+
+  @if (errorMessage()) {
+    <p class="banner error">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="banner info">Calling Claude…</p>
+  }
+
+  @for (group of groups(); track group.difficulty) {
+    <section class="difficulty-group">
+      <h2 class="difficulty-heading" [attr.data-difficulty]="group.difficulty">
+        {{ group.difficulty }}
+      </h2>
+      @for (q of group.questions; track q.question) {
+        <article class="question-card">
+          <p class="category">{{ q.category }}</p>
+          <p class="question">{{ q.question }}</p>
+          <p class="answer">{{ q.answer }}</p>
+        </article>
+      }
+    </section>
+  }
+</div>

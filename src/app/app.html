@@ -1,0 +1,13 @@
+<header class="app-header">
+  <span class="brand">Interview Prep</span>
+  @if (auth.isLoggedIn()) {
+    <div class="session">
+      @if (auth.currentStatus(); as status) {
+        <span class="status-badge" [attr.data-status]="status">{{ status }}</span>
+      }
+      <button type="button" (click)="logout()">Log out</button>
+    </div>
+  }
+</header>
+
+<router-outlet />
