@@ -33,4 +33,8 @@ export interface GenerateResult {
   questions: Question[];
   eval: EvalReport;
   metrics: RunMetrics;
+  // True when served from the shared topic cache (any user's prior search
+  // for this topic) instead of a fresh LLM run - metrics reflect the cheap
+  // cache lookup, not the original run's real cost.
+  from_cache: boolean;
 }

@@ -63,6 +63,17 @@
   padding: 0.9rem 1rem;
 }
 
+.cache-badge {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e8449;
+  background: #eafaf1;
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  width: fit-content;
+}
+
 .stat {
   display: flex;
   flex-direction: column;
