@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: prep-app-ui
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist/prep-app-ui/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
