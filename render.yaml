@@ -4,6 +4,12 @@ services:
     runtime: static
     buildCommand: npm ci && npm run build
     staticPublishPath: dist/prep-app-ui/browser
+    envVars:
+      # Render's default Node didn't meet Angular CLI's minimum (confirmed
+      # live: build failed on Node 24.14.1, needs >=24.15.0). Pinned to
+      # match what's tested locally.
+      - key: NODE_VERSION
+        value: 24.19.0
     routes:
       - type: rewrite
         source: /*
