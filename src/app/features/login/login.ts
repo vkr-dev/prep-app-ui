@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from '../../core/services/auth';
+import { LiquidGlassDirective } from '../../shared/liquid-glass.directive';
 
 type Mode = 'login' | 'register';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LiquidGlassDirective],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',
@@ -52,7 +53,7 @@ export class Login {
           } else if (res.status === 'revoked') {
             this.infoMessage.set('Logged in - your access has been revoked.');
           } else {
-            this.router.navigate(['/generate']);
+            this.router.navigate(['/']);
           }
         },
         error: () => {

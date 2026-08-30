@@ -8,17 +8,20 @@
 .login-card {
   width: 100%;
   max-width: 380px;
-  background: var(--surface);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: 14px;
   padding: 2.25rem 2rem;
-  box-shadow: var(--shadow-warm);
+  box-shadow: var(--shadow-glass);
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
   transition: box-shadow var(--transition), transform var(--transition);
 
   &:hover {
-    box-shadow: var(--shadow-warm-lift);
+    box-shadow: var(--shadow-glass-lift);
   }
 
   h1 {
@@ -50,7 +53,9 @@
     transition: background var(--transition), color var(--transition);
 
     &.active {
-      background: var(--brand-deep);
+      background: var(--glass-button-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       color: var(--text-inverse);
     }
 
@@ -112,8 +117,10 @@ label {
   margin-top: 0.5rem;
   padding: 0.7rem;
   border-radius: 8px;
-  border: none;
-  background: var(--brand-deep);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-button-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   color: var(--text-inverse);
   font-weight: 700;
   font-size: 0.95rem;
@@ -121,9 +128,9 @@ label {
   transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
 
   &:hover:not(:disabled) {
-    background: var(--brand-deep-hover);
+    background: var(--glass-button-hover-bg);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-warm);
+    box-shadow: var(--shadow-glass);
   }
 
   &:active:not(:disabled) {

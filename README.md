@@ -16,19 +16,26 @@ npm install
 src/app/
   core/
     models/         TypeScript interfaces mirroring the backend's Pydantic schemas
-    services/        Auth (login/register/logout, token in localStorage) and Generate (POST /api/generate)
+    services/        Auth, Generate (POST /api/generate), SearchHistory (GET /api/search-history), Progress (GET/POST /api/progress)
     interceptors/    Bearer token attached to every request; auto-logout on 401
     guards/          Route guard - UX redirect only, real enforcement is server-side
+  shared/
+    liquid-glass.directive.ts   applies public/liquid-glass.js's refraction effect to an element
   features/
+    search/          Home page - topic search (max 50 words) + past-searches grouped by AI-assigned category
     login/           Login + register form
-    generate/        Topic input, results view (categorized by difficulty + a run summary panel)
+    generate/        One-stop-shop view for a topic passed via ?topic= query param: subtopic accordions, recall-then-reveal answers, a per-subtopic reviewed checkbox, and a progress bar
 ```
 
-The generate page's run-summary panel surfaces what the backend's pipeline computed: average LLM-judged relevance (1-5), max pairwise duplicate similarity (flagged if too high), total latency, input/output token counts, and a per-step timing breakdown - all from the `eval`/`metrics` fields on the `GenerateResult` response (see prep-app-be's README for what produces them).
+Routing: `/` is the search/home page (protected), `/generate?topic=X` runs and shows results for that topic, `/login` is unauthenticated. Submitting the search bar or clicking a past-search button both just navigate to `/generate?topic=...` - the Generate component reads the query param on init and runs immediately, no separate "submit" step on that page.
+
+The generate page is a one-stop-shop per subtopic: full reading content first (an always-visible card, not collapsed), then a "Practice questions" accordion scoped only to that subtopic's Q&A - the two are deliberately separate, so reading and self-testing aren't conflated into one collapsed blob. Questions group by subtopic (`Question.category`), not by difficulty, so nothing about a topic is fragmented across separate buckets. Each question's answer stays hidden behind a "Recollect, then reveal" toggle so you can actually try to answer before checking. Reading content comes from `GenerateResult.subtopic_content` (populated today only for curated topics - see prep-app-be's README on `scripts/seed_curated_topics.py`; the LLM pipeline doesn't generate it yet, so the reading card simply doesn't render for those subtopics). Checking "I've reviewed this subtopic" persists to the backend (`Progress` service) and moves the top progress bar; unchecking moves it back. A `curated: true` result shows a distinct "human-curated" badge instead of the usual cache/run-summary panel copy, so it's always clear when content never touched an LLM at all.
+
+The run-summary panel (for LLM-generated topics) surfaces what the backend's pipeline computed: average LLM-judged relevance (1-5), max pairwise duplicate similarity (flagged if too high), total latency, input/output token counts, and a per-step timing breakdown - all from the `eval`/`metrics` fields on the `GenerateResult` response.
 
 ## Status
 
-Day 2: results view now renders the full agent pipeline's output, including eval scores and observability metrics. Deploy (Day 3) is next.
+Day 3 (deploy) is live. Since then: a warm brown-gradient glassmorphism redesign (including a real Chrome-only liquid-glass refraction effect with automatic Safari/Firefox fallback), and a dedicated search/home page with AI-categorized, DB-persisted per-user search history.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
 

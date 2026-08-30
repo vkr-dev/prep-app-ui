@@ -6,6 +6,10 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- Blocking (no defer/module) so window.liquidGlass exists before any
+         Angular directive's ngAfterViewInit runs - Angular's own scripts are
+         type="module" in <body>, which always execute after this. -->
+    <script src="liquid-glass.js"></script>
   </head>
   <body>
     <app-root></app-root>

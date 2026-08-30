@@ -1,0 +1,42 @@
+<div class="search-page">
+  <form class="search-card" appLiquidGlass (ngSubmit)="submit()">
+    <h1>What do you want to prep for?</h1>
+
+    <input
+      type="text"
+      placeholder="Enter a topic, e.g. SQL"
+      [ngModel]="topic()"
+      (ngModelChange)="topic.set($event)"
+      name="topic"
+      autocomplete="off"
+    />
+
+    <div class="word-count" [class.over]="overWordLimit()">{{ wordCount() }} / {{ maxWords }} words</div>
+    @if (overWordLimit()) {
+      <p class="field-error">Keep it to {{ maxWords }} words or fewer.</p>
+    }
+
+    <button type="submit" [disabled]="!topic().trim() || overWordLimit()">Generate</button>
+  </form>
+
+  @if (errorMessage()) {
+    <p class="banner error">{{ errorMessage() }}</p>
+  }
+
+  @if (loadingHistory()) {
+    <p class="loading-hint">Loading your past searches…</p>
+  }
+
+  @for (group of groups(); track group.category) {
+    <section class="history-group">
+      <h2>{{ group.category }}</h2>
+      <div class="history-buttons">
+        @for (item of group.items; track item.topic) {
+          <button type="button" class="history-button" (click)="selectPastSearch(item.topic)">
+            {{ item.short_label }}
+          </button>
+        }
+      </div>
+    </section>
+  }
+</div>

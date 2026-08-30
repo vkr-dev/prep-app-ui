@@ -1,16 +1,15 @@
 <div class="generate-page">
-  <form class="topic-form" (ngSubmit)="submit()">
-    <input
-      type="text"
-      placeholder="Enter a topic, e.g. SQL"
-      [ngModel]="topic()"
-      (ngModelChange)="topic.set($event)"
-      name="topic"
-    />
-    <button type="submit" [disabled]="loading() || !topic().trim()">
-      {{ loading() ? 'Generating…' : 'Generate' }}
-    </button>
-  </form>
+  <div class="topic-header">
+    <a routerLink="/" class="back-link">← New search</a>
+    <h1>{{ topic() }}</h1>
+  </div>
+
+  @if (result(); as res) {
+    <div class="progress-bar-track" role="progressbar" [attr.aria-valuenow]="progressPercent()" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-bar-fill" [style.width.%]="progressPercent()"></div>
+    </div>
+    <p class="progress-label">{{ checkedCount() }} / {{ groups().length }} subtopics reviewed</p>
+  }
 
   @if (errorMessage()) {
     <p class="banner error">{{ errorMessage() }}</p>
@@ -21,8 +20,10 @@
   }
 
   @if (result(); as res) {
-    <section class="run-summary">
-      @if (res.from_cache) {
+    <section class="run-summary" appLiquidGlass>
+      @if (res.curated) {
+        <div class="cache-badge curated">✍️ human-curated content - no LLM ever used</div>
+      } @else if (res.from_cache) {
         <div class="cache-badge">⚡ served from cache - no tokens used</div>
       }
       <div class="stat">
@@ -55,18 +56,57 @@
     </section>
   }
 
-  @for (group of groups(); track group.difficulty) {
-    <section class="difficulty-group">
-      <h2 class="difficulty-heading" [attr.data-difficulty]="group.difficulty">
-        {{ group.difficulty }}
-      </h2>
-      @for (q of group.questions; track q.question) {
-        <article class="question-card" [attr.data-difficulty]="q.difficulty">
-          <p class="category">{{ q.category }}</p>
-          <p class="question">{{ q.question }}</p>
-          <p class="answer">{{ q.answer }}</p>
-        </article>
+  @for (group of groups(); track group.subtopic) {
+    <section class="subtopic-section">
+      <h2 class="subtopic-title">{{ group.subtopic }}</h2>
+
+      @if (contentBySubtopic()[group.subtopic]; as content) {
+        <div class="subtopic-reading" appLiquidGlass>
+          @for (paragraph of content.split('\n\n'); track paragraph) {
+            <p>{{ paragraph }}</p>
+          }
+        </div>
       }
+
+      <div class="subtopic-accordion" [class.expanded]="isExpanded(group.subtopic)">
+        <button type="button" class="accordion-header" (click)="toggleAccordion(group.subtopic)">
+          <span class="chevron" [class.open]="isExpanded(group.subtopic)">▸</span>
+          <span class="subtopic-name">Practice questions</span>
+          <span class="question-count">{{ group.questions.length }} questions</span>
+          @if (isSubtopicChecked(group.subtopic)) {
+            <span class="reviewed-badge">✓ reviewed</span>
+          }
+        </button>
+
+        @if (isExpanded(group.subtopic)) {
+          <div class="accordion-body">
+            @for (q of group.questions; track q.question) {
+              <article class="qa-item" [attr.data-difficulty]="q.difficulty">
+                <p class="question">{{ q.question }}</p>
+                @if (isRevealed(group.subtopic, q.question)) {
+                  <p class="answer">{{ q.answer }}</p>
+                  <button type="button" class="reveal-toggle" (click)="toggleReveal(group.subtopic, q.question)">
+                    Hide answer
+                  </button>
+                } @else {
+                  <button type="button" class="reveal-toggle" (click)="toggleReveal(group.subtopic, q.question)">
+                    Recollect, then reveal answer
+                  </button>
+                }
+              </article>
+            }
+
+            <label class="reviewed-checkbox">
+              <input
+                type="checkbox"
+                [checked]="isSubtopicChecked(group.subtopic)"
+                (change)="onProgressToggle(group.subtopic, $any($event.target).checked)"
+              />
+              I've reviewed this subtopic
+            </label>
+          </div>
+        }
+      </div>
     </section>
   }
 </div>

@@ -17,6 +17,19 @@
   --surface-alt: #f3e4cd;
   --border: #e2cfb0;
 
+  /* Glass finish for panels floating over the gradient (cards, header) -
+     translucent warm cream + blur + a light "rim" border/highlight, so the
+     gradient still shows through instead of the card looking like a flat
+     opaque sheet. Text still sits on the cream tint underneath for contrast. */
+  --glass-bg: rgba(251, 243, 231, 0.72);
+  --glass-bg-strong: rgba(251, 243, 231, 0.85);
+  --glass-border: rgba(255, 250, 240, 0.55);
+  --glass-blur: blur(18px);
+  --glass-header-bg: rgba(46, 30, 18, 0.45);
+  --glass-header-border: rgba(255, 250, 240, 0.15);
+  --glass-button-bg: rgba(46, 30, 18, 0.78);
+  --glass-button-hover-bg: rgba(67, 48, 31, 0.88);
+
   --text-primary: #2e1e12;
   --text-inverse: #fbf3e7;
   --text-muted: #7a5c46;
@@ -29,6 +42,10 @@
 
   --shadow-warm: 0 4px 20px rgba(46, 30, 18, 0.18);
   --shadow-warm-lift: 0 10px 28px rgba(46, 30, 18, 0.28);
+  /* Adds the classic glass "rim light" - a faint inset highlight along the
+     top edge, on top of the regular drop shadow. */
+  --shadow-glass: 0 8px 32px rgba(46, 30, 18, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --shadow-glass-lift: 0 16px 40px rgba(46, 30, 18, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.5);
   --radius: 10px;
   --transition: 200ms ease;
 
@@ -66,8 +83,63 @@ body {
   }
 }
 
+/* Floating color blobs behind everything - the gradient alone is too smooth
+   for the liquid-glass refraction (public/liquid-glass.js) to read visibly;
+   refraction only shows clearly against something with defined edges to
+   bend. These also add motion independent of the slow background drift. */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(50px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  top: -12%;
+  left: -8%;
+  width: 46vw;
+  height: 46vw;
+  background: radial-gradient(circle, rgba(193, 127, 62, 0.6), transparent 70%);
+  animation: float-blob-1 22s ease-in-out infinite alternate;
+}
+
+body::after {
+  bottom: -16%;
+  right: -10%;
+  width: 52vw;
+  height: 52vw;
+  background: radial-gradient(circle, rgba(156, 59, 43, 0.45), transparent 70%);
+  animation: float-blob-2 27s ease-in-out infinite alternate;
+}
+
+@keyframes float-blob-1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(9vw, 7vh) scale(1.18);
+  }
+}
+
+@keyframes float-blob-2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-7vw, -9vh) scale(1.12);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   body {
+    animation: none;
+  }
+
+  body::before,
+  body::after {
     animation: none;
   }
 }
