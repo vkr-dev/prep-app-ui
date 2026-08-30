@@ -21,9 +21,7 @@
 
   @if (result(); as res) {
     <section class="run-summary" appLiquidGlass>
-      @if (res.curated) {
-        <div class="cache-badge curated">✍️ human-curated content - no LLM ever used</div>
-      } @else if (res.from_cache) {
+      @if (res.from_cache) {
         <div class="cache-badge">⚡ served from cache - no tokens used</div>
       }
       <div class="stat">
