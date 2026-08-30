@@ -2,12 +2,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 1.25rem;
-  background: #1b1f27;
-  color: #fff;
+  padding: 0.9rem 1.5rem;
+  background: rgba(46, 30, 18, 0.55);
+  backdrop-filter: blur(6px);
+  color: var(--text-inverse);
+  border-bottom: 1px solid rgba(251, 243, 231, 0.12);
 
   .brand {
+    font-family: var(--font-serif);
     font-weight: 700;
+    font-size: 1.15rem;
     letter-spacing: 0.02em;
   }
 
@@ -17,35 +21,41 @@
     gap: 0.75rem;
 
     button {
-      padding: 0.4rem 0.85rem;
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.4rem 0.9rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(251, 243, 231, 0.35);
       background: transparent;
-      color: #fff;
+      color: var(--text-inverse);
       cursor: pointer;
+      transition: background var(--transition), transform var(--transition), border-color var(--transition);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(251, 243, 231, 0.14);
+        border-color: rgba(251, 243, 231, 0.6);
+        transform: translateY(-1px);
       }
     }
   }
 
   .status-badge {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.55rem;
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
     border-radius: 999px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    background: rgba(255, 255, 255, 0.15);
+    letter-spacing: 0.04em;
+    background: rgba(251, 243, 231, 0.18);
 
     &[data-status='owner'] {
-      background: #27ae60;
+      background: var(--success);
+      color: var(--text-inverse);
     }
     &[data-status='pending'] {
-      background: #b9770e;
+      background: var(--warning);
+      color: var(--text-inverse);
     }
     &[data-status='revoked'] {
-      background: #c0392b;
+      background: var(--danger);
+      color: var(--text-inverse);
     }
   }
 }

@@ -61,7 +61,7 @@
         {{ group.difficulty }}
       </h2>
       @for (q of group.questions; track q.question) {
-        <article class="question-card">
+        <article class="question-card" [attr.data-difficulty]="q.difficulty">
           <p class="category">{{ q.category }}</p>
           <p class="question">{{ q.question }}</p>
           <p class="answer">{{ q.answer }}</p>
