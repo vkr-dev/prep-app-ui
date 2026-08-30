@@ -1,7 +1,6 @@
 // Production build. Swapped in via angular.json fileReplacements for the
-// "production" configuration. Fill this in with the deployed Render backend
-// URL on Day 3.
+// "production" configuration.
 export const environment = {
   production: true,
-  apiUrl: 'https://REPLACE-ME.onrender.com',
+  apiUrl: 'https://prep-app-be.onrender.com',
 };
