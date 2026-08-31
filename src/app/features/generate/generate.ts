@@ -154,7 +154,13 @@ export class Generate implements OnInit {
       },
       error: (err) => {
         this.loading.set(false);
-        if (err.status === 403) {
+        if (err.status === 400) {
+          // The safety guardrail rejected this topic (app/safety.py) - its
+          // response detail is the exact, deliberately terse message to
+          // show, not a generic explanation. See that module for why it's
+          // kept non-specific.
+          this.errorMessage.set(err.error?.detail ?? 'This topic was not accepted.');
+        } else if (err.status === 403) {
           this.errorMessage.set(
             'Your access is not approved or has expired. Ask the owner to approve/re-approve your account.',
           );
