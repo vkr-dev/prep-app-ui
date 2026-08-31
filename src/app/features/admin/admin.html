@@ -1,0 +1,54 @@
+<div class="admin-page">
+  <div class="page-header">
+    <a routerLink="/" class="back-link">← Back to search</a>
+    <h1>Accounts</h1>
+  </div>
+
+  @if (errorMessage()) {
+    <p class="banner error">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="loading-hint">Loading accounts…</p>
+  } @else if (users().length === 0) {
+    <p class="empty-hint">No guest accounts yet - registrations will show up here.</p>
+  } @else {
+    <section class="user-list" appLiquidGlass>
+      @for (user of users(); track user.id) {
+        <article class="user-row" [attr.data-status]="user.status">
+          <div class="user-info">
+            <span class="email">{{ user.email }}</span>
+            <span class="status-badge" [attr.data-status]="user.status">{{ user.status }}</span>
+            @if (user.status === 'approved' && user.access_expires_at) {
+              <span class="expires">until {{ user.access_expires_at | date: 'medium' }}</span>
+            }
+          </div>
+
+          <div class="user-actions">
+            @if (user.status === 'pending') {
+              <button
+                type="button"
+                class="approve-btn"
+                [disabled]="isActingOn(user.id)"
+                (click)="approve(user)"
+              >
+                {{ isActingOn(user.id) ? 'Approving…' : 'Approve' }}
+              </button>
+            } @else if (user.status === 'approved') {
+              <button
+                type="button"
+                class="revoke-btn"
+                [disabled]="isActingOn(user.id)"
+                (click)="revoke(user)"
+              >
+                {{ isActingOn(user.id) ? 'Revoking…' : 'Revoke' }}
+              </button>
+            } @else {
+              <span class="no-action">—</span>
+            }
+          </div>
+        </article>
+      }
+    </section>
+  }
+</div>

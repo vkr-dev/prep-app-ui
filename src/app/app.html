@@ -5,6 +5,9 @@
       @if (auth.currentStatus(); as status) {
         <span class="status-badge" [attr.data-status]="status">{{ status }}</span>
       }
+      @if (auth.currentStatus() === 'owner') {
+        <a routerLink="/admin" class="admin-link">Accounts</a>
+      }
       <button type="button" (click)="logout()">Log out</button>
     </div>
   }
