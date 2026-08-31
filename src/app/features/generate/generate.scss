@@ -210,6 +210,12 @@
     font-size: 1rem;
     line-height: 1.75;
     color: var(--text-primary);
+    // Reading content is plain text, not markdown - a "paragraph" (split
+    // on blank lines in generate.ts) can still contain single newlines
+    // deliberately, e.g. a STAR-method heading followed by bulleted lines.
+    // pre-line preserves those single breaks and collapses runs of
+    // whitespace, without needing an actual <ul>/<li> structure.
+    white-space: pre-line;
   }
 }
 
