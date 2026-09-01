@@ -1,99 +1,14 @@
 # prep-app-ui
 
-Angular frontend for the Interview-Prep Question Generator. See [context.md](context.md) for the full project brief. Backend lives in the sibling `prep-app-be` repo.
+Angular frontend for the Learning Tool - an interview-prep question generator. Backend lives in the sibling `prep-app-be` repo.
 
-## Setup
+## What it does
 
-Points `src/environments/environment.development.ts` at the local backend (`http://localhost:8000` by default) - make sure that's running first (see prep-app-be's README). Then:
+Lets a user search a topic and get back a one-stop-shop study page: subtopics each with reading content followed by practice Q&A (recall-then-reveal answers), a progress checkbox per subtopic, and a run-summary panel showing eval/quality metrics. Also includes login/guest-registration, a per-user search history grouped by AI-assigned category, and an owner-only admin page for approving/revoking guest accounts.
 
-```bash
-npm install
-```
+## Tech stack
 
-## App structure
-
-```
-src/app/
-  core/
-    models/         TypeScript interfaces mirroring the backend's Pydantic schemas
-    services/        Auth, Generate (POST /api/generate), SearchHistory (GET /api/search-history), Progress (GET/POST /api/progress)
-    interceptors/    Bearer token attached to every request; auto-logout on 401
-    guards/          auth-guard (must be logged in) and owner-guard (must be the owner) - both UX redirects only, real enforcement is server-side
-  shared/
-    liquid-glass.directive.ts   applies public/liquid-glass.js's refraction effect to an element
-  features/
-    search/          Home page - topic search (max 50 words) + past-searches grouped by AI-assigned category
-    login/           Login + register form
-    generate/        One-stop-shop view for a topic passed via ?topic= query param: subtopic accordions, recall-then-reveal answers, a per-subtopic reviewed checkbox, and a progress bar
-    admin/           Owner-only accounts page - lists every guest account and lets the owner approve a pending one or revoke an approved one, a click each, no manual API calls needed
-```
-
-Routing: `/` is the search/home page (protected), `/generate?topic=X` runs and shows results for that topic, `/admin` is the owner-only accounts page, `/login` is unauthenticated. Submitting the search bar or clicking a past-search button both just navigate to `/generate?topic=...` - the Generate component reads the query param on init and runs immediately, no separate "submit" step on that page.
-
-The generate page is a one-stop-shop per subtopic: full reading content first (an always-visible card, not collapsed), then a "Practice questions" accordion scoped only to that subtopic's Q&A - the two are deliberately separate, so reading and self-testing aren't conflated into one collapsed blob. Questions group by subtopic (`Question.category`), not by difficulty, so nothing about a topic is fragmented across separate buckets. Each question's answer stays hidden behind a "Recollect, then reveal" toggle so you can actually try to answer before checking. Reading content comes from `GenerateResult.subtopic_content`, populated for curated topics by hand (see prep-app-be's README on `scripts/seed_curated_topics.py`) and for LLM-generated topics by the pipeline's own Explain step - either way the frontend renders it identically, and only skips the reading card in the rare case a subtopic genuinely has no matching entry.
-
-The admin page (`/admin`, nav link labeled "Accounts", shown only when logged in as the owner) lists every non-owner account with its current status - pending accounts get an "Approve" button, approved accounts show their exact 1-hour expiry timestamp and a "Revoke" button, revoked accounts are shown dimmed with no action. This is a genuine UI on top of the backend's existing `GET /api/auth/users` / `POST /api/auth/approve/{id}` / `POST /api/auth/revoke/{id}` endpoints - before this page existed, approving a guest required a manual `curl` call or the FastAPI `/docs` Swagger UI, since nothing in the frontend called those endpoints at all.
-
-The run-summary panel (for LLM-generated topics) surfaces what the backend's pipeline computed: average LLM-judged relevance (1-5), max pairwise duplicate similarity (flagged if too high), total latency, input/output token counts, and a per-step timing breakdown - all from the `eval`/`metrics` fields on the `GenerateResult` response.
-
-## Status
-
-Day 3 (deploy) is live. Since then: a warm brown-gradient glassmorphism redesign (including a real Chrome-only liquid-glass refraction effect with automatic Safari/Firefox fallback), and a dedicated search/home page with AI-categorized, DB-persisted per-user search history.
-
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Framework**: Angular (standalone components, signals)
+- **Styling**: glassmorphism UI with a custom liquid-glass refraction effect
+- **Testing**: Vitest
+- **Deployment**: static hosting, talks to the `prep-app-be` API
