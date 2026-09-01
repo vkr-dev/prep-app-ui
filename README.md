@@ -1,6 +1,6 @@
 # prep-app-ui
 
-Angular frontend for the Learning Tool - an interview-prep question generator. Backend lives in the sibling `prep-app-be` repo.
+Angular frontend for the Learning Tool. Backend lives in the sibling `prep-app-be` repo.
 
 ## What it does
 
