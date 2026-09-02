@@ -1,0 +1,396 @@
+// Embedded below the generate page's own content (see generate.html), not a
+// standalone page - the divider + top margin/padding are what separate this
+// section from the generated questions above, since there's no page chrome
+// of its own here anymore.
+.hybrid-search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--text-inverse);
+  }
+
+  .subtitle {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-inverse);
+    opacity: 0.75;
+  }
+}
+
+.search-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-glass);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.query-row {
+  display: flex;
+  gap: 0.75rem;
+
+  input {
+    flex: 1;
+    padding: 0.85rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    transition: border-color var(--transition), box-shadow var(--transition);
+
+    &:focus-visible {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(193, 127, 62, 0.3);
+    }
+  }
+
+  button {
+    padding: 0 1.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-button-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-inverse);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+
+    &:hover:not(:disabled) {
+      background: var(--glass-button-hover-bg);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-glass);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .clear-btn {
+    background: transparent;
+    color: var(--text-inverse);
+    opacity: 0.75;
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: transparent;
+      opacity: 1;
+      box-shadow: none;
+      transform: none;
+      text-decoration: underline;
+    }
+  }
+}
+
+.tuning-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+  }
+
+  input[type='number'] {
+    width: 4rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    color: var(--text-primary);
+  }
+
+  select {
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    color: var(--text-primary);
+  }
+
+  .weight-value {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+  }
+
+  &.checkbox-label,
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+}
+
+.banner {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+
+  &.error {
+    background: var(--danger-bg);
+    color: var(--danger);
+  }
+}
+
+// The search box + button sit above this control, which sits above the
+// results list it reorders - "above the sort" placement, deliberately.
+.sort-row {
+  display: flex;
+  justify-content: flex-end;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-inverse);
+    opacity: 0.85;
+  }
+
+  select {
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    color: var(--text-primary);
+  }
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.result-item {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-warm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.result-score {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--brand-deep);
+}
+
+.method-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+
+  &[data-method='keyword'] {
+    color: var(--brand-deep);
+    background: rgba(193, 127, 62, 0.18);
+  }
+
+  &[data-method='vector'] {
+    color: var(--success);
+    background: rgba(95, 122, 61, 0.14);
+  }
+}
+
+.snippet {
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.sub-scores {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.empty-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--text-inverse);
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+.metrics-panel,
+.eval-suite {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-glass);
+
+  h2 {
+    flex-basis: 100%;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--text-primary);
+  }
+}
+
+.eval-suite-header {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h2 {
+    flex-basis: auto;
+  }
+
+  button {
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-button-bg);
+    color: var(--text-inverse);
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+
+    &:hover:not(:disabled) {
+      background: var(--glass-button-hover-bg);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.eval-suite .subtitle {
+  flex-basis: 100%;
+  margin: -0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.eval-block {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--glass-border);
+
+  .eval-note {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+}
+
+.eval-summary {
+  display: flex;
+  gap: 1.5rem;
+  flex-basis: 100%;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 90px;
+
+  .stat-value {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--brand-deep);
+  }
+
+  .stat-unit {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-left: 0.15rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+  }
+}
+
+.eval-table {
+  flex-basis: 100%;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-primary);
+  }
+
+  th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+  }
+}

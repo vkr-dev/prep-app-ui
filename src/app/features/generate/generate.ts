@@ -2,6 +2,7 @@ import { DecimalPipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { GenerateResult, Question } from '../../core/models/generate.models';
+import { Auth } from '../../core/services/auth';
 import { Generate as GenerateService } from '../../core/services/generate';
 import { Progress as ProgressService } from '../../core/services/progress';
 import { LiquidGlassDirective } from '../../shared/liquid-glass.directive';
@@ -22,6 +23,10 @@ export class Generate implements OnInit {
   private readonly progressService = inject(ProgressService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  // Run-summary panel (eval/latency/token/step-timing internals) is
+  // owner-only - a guest doesn't need or benefit from seeing pipeline
+  // internals, and it's the kind of detail the owner cares about debugging.
+  readonly auth = inject(Auth);
 
   readonly topic = signal('');
   readonly loading = signal(false);

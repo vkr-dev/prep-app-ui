@@ -3,12 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SearchHistoryGroup } from '../../core/models/search-history.models';
 import { SearchHistory as SearchHistoryService } from '../../core/services/search-history';
+import { QuickSearch as HybridSearchSection } from '../quick-search/quick-search';
 import { LiquidGlassDirective } from '../../shared/liquid-glass.directive';
 
 const MAX_TOPIC_WORDS = 50;
 
 @Component({
-  imports: [FormsModule, LiquidGlassDirective],
+  imports: [FormsModule, LiquidGlassDirective, HybridSearchSection],
   selector: 'app-search',
   styleUrl: './search.scss',
   templateUrl: './search.html',

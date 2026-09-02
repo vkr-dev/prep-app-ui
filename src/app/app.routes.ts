@@ -9,6 +9,8 @@ import { Admin } from './features/admin/admin';
 export const routes: Routes = [
   { path: '', component: Search, canActivate: [authGuard] },
   { path: 'login', component: Login },
+  // Hybrid Search (app/features/quick-search) lives embedded inside this
+  // page now, below the generated content - not its own route.
   { path: 'generate', component: Generate, canActivate: [authGuard] },
   { path: 'admin', component: Admin, canActivate: [authGuard, ownerGuard] },
   { path: '**', redirectTo: '' },
